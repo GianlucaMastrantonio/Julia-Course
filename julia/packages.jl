@@ -4,30 +4,30 @@ Pkg.activate(dir)
 
 # * #SECTION: Packages 
 #=
-  Julia has a very simple way to create packages. Use a package for you furnction has a number of advantages:
+  Julia has a very simple way to create packages. Using a package for your functions has a number of advantages:
   - the scope of a package makes more sense of the scope of a script
-  - function outside of a package tends to run slower
-  - revise is very usefull.
+  - functions outside of a package tend to run slower
+  - revise is very useful.
 =#
 
 #=
-we are going to create a packe to do some MC simulation
+we are going to create a package to do some MC simulation
 =#
 start_proj::Bool = false
 if start_proj
   
 
-  # the first step is to create a packeage, with the command generate
+  # the first step is to create a package, with the command generate
   Pkg.generate("mc_package")
   # then we have to add the package to the environment. Instead of using Pkg.add("my_package"), we can use Pkg.develop(url = ....)
   Pkg.develop(url="/Users/gianlucamastrantonio/Dropbox (Politecnico di Torino Staff)/lavori/Julia Course/mc_package")
-  # this command tells julia that changes in the code are expected. If you load the package revise, than everytime that you change the code, julia will automatically update the package
+  # this command tells julia that changes in the code are expected. If you load the package revise, than every time that you change the code, julia will automatically update the package
   Pkg.add("Revise")
   Pkg.add("Distributions")
 
 
 
-  # we have to create and the manifest and the project also for the package, and this can be done by activating tha package directory and Pkg.add() the pakages. Let's we add some useful packages
+  # we have to create and the manifest and the project also for the package, and this can be done by activating tha package directory and Pkg.add() the packages. Let's we add some useful packages
   Pkg.activate("/Users/gianlucamastrantonio/Dropbox (Politecnico di Torino Staff)/lavori/Julia Course/mc_package")
   Pkg.add("Distributions")
   Pkg.add("Random")
@@ -39,26 +39,27 @@ if start_proj
   # the most important file on a package is the file with the same name on the package, in the src directory. See the contento of the fle
   
 end
+
 #=
 take the package aside for a moment and let introduce the package Distributions
 =#
 using Revise
 using mc_package 
 #=
-using mc_package  may give you error, if you change the packages that your package depends on. Julia tells you the slution to this issue.
-In general, Julia tell you the problem, where it is (if it is a funciton of a package, she tell you the row), and sometimes how to solve it
+using mc_package  may give you error, if you change the packages that your package depends on. Julia tells you the solution to this issue.
+In general, Julia tells you the problem, where it is (if it is a function of a package, she tells you the row), and sometimes how to solve it
 =#
 using Distributions
 using Term
 # * SUBSECTION: Distributions
 
 #=
-In Julia, distributions are Types, as Float and Int. For exmaple we can create an object of type N(10,2)
+In Julia, distributions are Types, as Float and Int. For example we can create an object of type N(10,2)
 =#
 dist1 = Normal(10,2)
 typeof(dist1)
 
-# all julia apckages are on github, and you can see there the code and the funcitons: https://github.com/JuliaStats/Distributions.jl
+# all julia packages are on github, and you can see there the code and the functions: https://github.com/JuliaStats/Distributions.jl
 
 
 # since it is a type, the function that has dist1 has a type give output based on the object
@@ -72,11 +73,11 @@ logpdf(dist1,1)
 logcdf(dist1, 1)
 quantile(dist1,0.5)
 
-# we can extraxt the parameters of the distribution
+# we can extract the parameters of the distribution
 params(dist1)
 # or
 dump(dist1)
-# note that parameters are actually greek lettere. IN Julia you can use unicode character, for exmaple
+# note that parameters are actually greek letters. IN Julia you can use unicode characters, for example
 Σ = 2
 ζ = Σ*3
 ζ
@@ -88,12 +89,12 @@ dist1.μ
 
 # * SUBSECTION: importance sampling
 #=
-W want to comoute an MC approaximation of the integral
+We want to compute an MC approximation of the integral
 int h(x)f(x) d(x)
 by using importance sampling
 int h(x)f(x)/g(x)g(x) d(x) approx sum_{b=1}^B (h(x_b)f(x_b)/g(x_b))/B
 
-- our function neew
+- our function need
 - B
 - f(x)
 - g(x)
@@ -135,18 +136,18 @@ mc_standard.samples = vec_norm
 mc_standard.samples
 
 
-# let's see what happens woth the immutable one
+# let's see what happens with the immutable one
 
 mc_standard_imm = StandardMC_immutable_V2(func_h,100, zeros(Float64, 100));
 mc_standard_imm.B = 20
 vec_norm = rand(Normal(0.0, 1.0), 100)
 mc_standard_imm.samples = vec_norm
-# we cannot change the element, but since a vector is matable, we can change theri value
+# we cannot change the element, but since a vector is mutable, we can change their value
 mc_standard_imm.samples[1:3] .=  [1.0, 2.0, 3.0]
 mc_standard_imm.samples
 
 
-# you should be careful when the object is created, because since argumento are passed by reference, the vector inside the object and the one used to create the object are the same
+# you should be careful when the object is created, because since arguments are passed by reference, the vector inside the object and the one used to create the object are the same
 
 test_vec = rand(Normal(0.0,1.0),5)
 mc_standard_imm = StandardMC_immutable_V2(func_h,5, test_vec);
@@ -155,7 +156,7 @@ test_vec === mc_standard_imm.samples
 
 test_vec[1] = 100000.0
 mc_standard_imm.samples[1]
-# this can be veru useful. If you don't like it, just use a deepcopy in the constructur, or define a constructure without the matrix
+# this can be very useful. If you don't like it, just use a deepcopy in the constructur, or define a constructor without the matrix
 StandardMC_V1(func_h,100);
 
 # we can also use the parametric version of the structure
@@ -165,14 +166,14 @@ typeof(mc_standard_par)
 
 # * #SUBSECTION: Importance sampling and MC function
 
-# let's define an importance samling object
+# let's define an importance sampling object
 test_vec = zeros(Float64,5)
 imp_samp = ImportanceSampling(func_h, Gamma(1.0, 1.0), 5, test_vec);
 dump(imp_samp)
 typeof(imp_samp)
 
 
-# now that we have the two function we can use the mc function
+# now that we have the two functions we can use the mc function
 n_samples::Int64 = 1000
 test_vec = zeros(Float64, n_samples)
 function func_h(x::Float64)

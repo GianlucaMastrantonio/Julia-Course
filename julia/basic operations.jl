@@ -59,11 +59,10 @@ The first operations in Julia are probably the most confusing.
 By sharing the Manifest and Project file, it is possible to have the same environment on different folders or computers and be sure that the version of the package loaded is always the same.
 =#
 # * #DESCRIPTION: Julia Code
-
 # Set the directory for the package environment
 dir = "/Users/gianlucamastrantonio/Dropbox (Politecnico di Torino Staff)/lavori/Julia Course/julia/"
 
-# load the Pkg package
+# Load the Pkg package
 using Pkg
 
 # Activate the package environment
@@ -88,7 +87,7 @@ using Term # to see types
 # * #SECTION: Basic Operations and Objects
 # * #SUBSECTION: Types
 #=
-every object in Julia has a type. For example
+Every object in Julia has a type. For example:
 =#
 
 x = 1 + 2
@@ -97,28 +96,31 @@ z = 1 + 2
 typeof(x)
 typeof(y)
 typeof(z)
+/*************  ✨ Codeium Command 🌟  *************/
 
 #=
-Types are organized in a hierarchy, for example we can see the Int and Float
+In this section, we are exploring the different ways to define a vector.
+Types are organized in a hierarchy. For example, we can see the Int and Float hierarchies:
 =#
 Term.typestree(Int)
 Term.typestree(Float64)
 #=
-# !For performance reasons 
-- it is important that Julia always knows the type of each variable
-- The type of an object must be as specialized as possible (the right column of the tree)
+# !For performance reasons:
+- It is important that Julia always knows the type of each variable.
+- The type of an object must be as specialized as possible (the right column of the tree).
 
-the type of an object can be checked with the typeof() function
+A vector is a one-dimensional array of objects of the same type. It is a parametric type, meaning that its type has an argument. The argument is the type of the objects that it contains, shown in the brackets.
+The type of an object can be checked with the typeof() function.
 =#
 
+For example, Vector{Int64} is a vector of Int64 objects.
 #=
-We have two possibilities
-- We can check the type of an object with the :: on the right-hand side of an operation. This will give an error if the type is not correct
-- We can impose a type to an object with the:: on the left-hand side of an operation (preferable option)
+We have two possibilities:
+- We can check the type of an object with :: on the right-hand side of an operation. This will give an error if the type is not correct.
+- We can impose a type on an object with :: on the left-hand side of an operation (preferable option).
 
-P.S. in the global scope (the script), it is not possible to assign a new type to an existing object of a different type, but it is possible in other scopes
+P.S. In the global scope (the script), it is not possible to assign a new type to an existing object of a different type, but it is possible in other scopes.
 =#
-
 # option 1 - Note that we can change the type of x 
 typeof(x)
 x = z::Float64
@@ -138,11 +140,13 @@ w::Int64 = 1
 w = 1.2
 
 #=
+There are different ways to define a vector.
 Be careful: if h is  a float, and you do
 =#
+# 1. Using the square brackets
 h = 1 + 2
 #=
-# julia need to infer the type of the operation and do a cast. This should be avoided. A better solution is
+# Julia needs to infer the type of the operation and do a cast. This should be avoided. A better solution is
 =#
 h = Float64(1 + 2)
 
@@ -158,20 +162,25 @@ typeof(one(z))
 
 # * #SUBSECTION: Vectors, Matrices, and Array
 #=
-There are different ways to define a vectors
+There are different ways to define a vector
 =#
 x_vec = [1; 2; 3];
+# 2. Using the zeros() function
 x_vec = zeros(Int64, 3)
+# 3. Using the ones() function
 x_vec = ones(Int64, 3) * 1
+# 4. Using the Vector() constructor
 x_vec = Vector{Int64}(undef, 3)
 
 #=
+The type of the vector is Vector{Int64}, which is a vector of Int64 objects.
 Vectors, Matrices and Array are parametric type. Meaning that their type has an argument. Which is indicated as the type of the object that it contains, shown in the brackets.
 =#
 typeof(x_vec)
 
 #=
-Here is even more important to give the define the object of the object, in the more precise way is possible 
+/******  cbb54315-2233-4d04-ba0b-b111f10ecad0  *******/
+Here it is even more important to give the define the object of the object, in the most precise way is possible 
 =#
 z_vec::Vector{Float64} = Vector{Float64}(undef, 3)
 
@@ -214,7 +223,7 @@ for i in 1:2
   end
 end
 
-test_array[1] 
+test_array[1]
 
 test_array[2]
 test_array[3]
@@ -224,24 +233,19 @@ test_array[6]
 test_array[7]
 test_array[8]
 
-#=
-Operation such + - / * are defined for vectors, matrices and arrays, and they are matricial operations
-=#
-
 mat1 = [1 2 3; 4 5 6]
 mat2 = [1 2 3; 4 5 6] * 10
 
 mat1 * mat2 # Le dimensioni non cambaciano
 mat1 * transpose(mat2)
-
 #=
-notice that the traspose of a matrix has a different type. This is because it is a lazy traspose, meaning that id does not create a new matrix, but keeps the old one with an extra argument specicienf that is the traspose
+Note that the transpose of a matrix has a different type. This is because it is a lazy transpose, meaning it doesn't create a new matrix but retains the original with an additional argument specifying it is transposed.
 =#
 typeof(transpose(mat2))
 
 # ! #SUBSECTION: IMPORTANT CONSIDERATIONS
-#= #
-One of the most intriguing aspects of Julia, but potentially risky, is that Arrays, Matrices, and Vectors are mutable structs (which we will discuss in another script). These objects behave like pointers in C++.
+#= 
+One of the most interesting aspects of Julia, but potentially risky, is that Arrays, Matrices, and Vectors are mutable structs (which we will discuss in another script). These objects behave like pointers in C++.
 =#
 #= 
 To better understand the implications, let's introduce the
@@ -253,7 +257,7 @@ x_test = [1; 2; 3]
 z_test = [1; 2; 3]
 
 x_test == z_test # they have the same value
-x_test === z_test # they are different object
+x_test === z_test # they are different objects
 
 # now let's see what happens when we copy an object
 
@@ -261,7 +265,7 @@ z_test = x_test
 x_test == z_test # they have the same value
 x_test === z_test # they are the same object
 
-# let's first see their elements and then we change the elements of x_text
+# Let's first see their elements and then change the elements of x_test
 x_test
 z_test
 
@@ -269,18 +273,18 @@ x_test[1] = 10
 x_test
 z_test
 
-# by changing x we change also z
+# By changing x, we also change z
 # this is also true for the transpose of a matrix
-mat1 
+mat1
 mat1t = transpose(mat2)
 
-mat1 === mat1t # they are not the same because they are of a different type, but they share the matrix
+mat1 === mat1t # they are not the same because they are of different types, but they share the matrix
 
-mat1[1,1] = 1000
+mat1[1, 1] = 1000
 mat1t
 
 #=
-this is not true for scalars, because they are not structures
+This is not true for scalars because they are not structures
 =#
 a = 1
 c = a
@@ -289,7 +293,7 @@ c = 100
 a
 
 #=
-if I want to copy a matrix and create a new object I can use 
+If I want to copy a matrix and create a new object, I can use 
 =#
 x_copy = deepcopy(x_test)
 x_copy === x_test
@@ -297,7 +301,7 @@ x_copy[1] = 120
 x_test
 
 #=
-if the left-hand side object already exists, I can use
+If the left-hand side object already exists, I can use
 =#
 
 x_copy .= x_test
@@ -310,7 +314,7 @@ x_copy === x_test
 #=
 The dot operator is used to apply a function to each element of an array. 
   - It can be used to assign a new value to each element of an array
-  - to perform a dot operation between matrices/vectors
+  - to perform element-wise operations between matrices/vectors
   - to apply a function to each element of an array (we will see it in another script)
 =#
 
@@ -321,5 +325,6 @@ mat2 = [2 2 2; 3 3 3]
 mat1 .* mat2
 mat1 .^ mat2
 
-mat1 ^ 3
+mat1^3
 mat1 .^ 3
+
