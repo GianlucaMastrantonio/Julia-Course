@@ -1,0 +1,11 @@
+[deps]
+AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
+JuliaFormatter = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
+Pluto = "c3e4b0f8-55cb-11ea-2926-15256bba5781"
+RCall = "6f49c342-dc21-5d91-9882-a32aef131414"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+Term = "22787eb5-b846-44ae-b979-8e399b8463ab"
+ToggleableAsserts = "07ecc579-1b30-493c-b961-3180daf6e3ae"
+mc_package = "a9632458-afde-45bc-8843-03e426c4d4bc"
