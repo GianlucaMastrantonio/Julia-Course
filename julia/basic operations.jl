@@ -270,8 +270,7 @@ x_test
 z_test
 
 # by changing x we change also z
-
-# this is also try for the transpose of a matrix
+# this is also true for the transpose of a matrix
 mat1 
 mat1t = transpose(mat2)
 
@@ -281,7 +280,7 @@ mat1[1,1] = 1000
 mat1t
 
 #=
-this is not tru for scalar, because they are not structure
+this is not true for scalars, because they are not structures
 =#
 a = 1
 c = a
@@ -290,7 +289,7 @@ c = 100
 a
 
 #=
-if i want to copy a matrix, and creating a new object i can use 
+if I want to copy a matrix and create a new object I can use 
 =#
 x_copy = deepcopy(x_test)
 x_copy === x_test
@@ -298,7 +297,7 @@ x_copy[1] = 120
 x_test
 
 #=
-if the left hand side object laready exist, I can use
+if the left-hand side object already exists, I can use
 =#
 
 x_copy .= x_test
