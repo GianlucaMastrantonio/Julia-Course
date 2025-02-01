@@ -22,6 +22,7 @@ end
 # Useful for tasks like graphing and data cleaning, which may be easier in R.
 # You can specify which R version to use by setting the R_HOME environment variable.
 =#
+ENV["R_HOME"] = "path_to_r_version_to_use"
 
 # Load the RCall package to interface with R
 using RCall

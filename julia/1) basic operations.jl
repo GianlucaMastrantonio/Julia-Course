@@ -96,10 +96,8 @@ z = 1 + 2
 typeof(x)
 typeof(y)
 typeof(z)
-/*************  ✨ Codeium Command 🌟  *************/
 
 #=
-In this section, we are exploring the different ways to define a vector.
 Types are organized in a hierarchy. For example, we can see the Int and Float hierarchies:
 =#
 Term.typestree(Int)
@@ -109,11 +107,9 @@ Term.typestree(Float64)
 - It is important that Julia always knows the type of each variable.
 - The type of an object must be as specialized as possible (the right column of the tree).
 
-A vector is a one-dimensional array of objects of the same type. It is a parametric type, meaning that its type has an argument. The argument is the type of the objects that it contains, shown in the brackets.
 The type of an object can be checked with the typeof() function.
 =#
 
-For example, Vector{Int64} is a vector of Int64 objects.
 #=
 We have two possibilities:
 - We can check the type of an object with :: on the right-hand side of an operation. This will give an error if the type is not correct.
@@ -140,10 +136,8 @@ w::Int64 = 1
 w = 1.2
 
 #=
-There are different ways to define a vector.
 Be careful: if h is  a float, and you do
 =#
-# 1. Using the square brackets
 h = 1 + 2
 #=
 # Julia needs to infer the type of the operation and do a cast. This should be avoided. A better solution is
@@ -165,21 +159,16 @@ typeof(one(z))
 There are different ways to define a vector
 =#
 x_vec = [1; 2; 3];
-# 2. Using the zeros() function
 x_vec = zeros(Int64, 3)
-# 3. Using the ones() function
 x_vec = ones(Int64, 3) * 1
-# 4. Using the Vector() constructor
 x_vec = Vector{Int64}(undef, 3)
 
 #=
-The type of the vector is Vector{Int64}, which is a vector of Int64 objects.
 Vectors, Matrices and Array are parametric type. Meaning that their type has an argument. Which is indicated as the type of the object that it contains, shown in the brackets.
 =#
 typeof(x_vec)
 
 #=
-/******  cbb54315-2233-4d04-ba0b-b111f10ecad0  *******/
 Here it is even more important to give the define the object of the object, in the most precise way is possible 
 =#
 z_vec::Vector{Float64} = Vector{Float64}(undef, 3)
