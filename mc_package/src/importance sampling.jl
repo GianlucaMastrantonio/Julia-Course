@@ -12,10 +12,10 @@ The functions are written in a verbose style to make it easier to understand wha
 
 function importance_sampling(hs::Function, fx::TypeD1, gx::TypeD2, B::Int64) where {TypeD1<:ContinuousUnivariateDistribution,TypeD2<:ContinuousUnivariateDistribution}
 
-  # Create a vector to store the samples
+  # Generate B samples from the proposal distribution `gx` and store them in a vector
   samp::Vector{Float64} = rand(gx, B)
 
-  # Initialize the return variable to zero
+  # Initialize the accumulator for the weighted sum of function evaluations
   ret::Float64 = 0.0
 
   # Loop over the samples
