@@ -66,22 +66,86 @@ function importance_sampling2(hs::Function, fx::TypeD1, gx::TypeD2, B::Int64) wh
 
 end
 
-function importance_sampling3(hs::Function, fx::TypeD1, gx::TypeD2, B::Int64) where {TypeD1<:ContinuousUnivariateDistribution,TypeD2<:ContinuousUnivariateDistribution}
+"""
+    importance_sampling(hs, fx, gx, B; [threaded=false])
 
-  # Generate a vector of samples from the proposal distribution `gx`
-  samp::Vector{Float64} = rand(gx, B)
+Perform importance sampling estimation of ∫hs(x)fx(x)dx using proposal distribution g(x).
 
-  # Evaluate the function `hs` at the samples
-  hs_val = hs.(samp)
+# Arguments
+- `hs`: Function to integrate, must map Real → Real
+- `fx`: Target distribution (must be a ContinuousUnivariateDistribution)
+- `gx`: Proposal distribution (must be a ContinuousUnivariateDistribution)
+- `B`: Number of samples (must be ≥ 1)
+- `threaded`: Use multithreading (default: false)
 
-  # Evaluate the probability density function of `fx` at the samples
-  pdf_fx = pdf.(fx, samp)
+# Returns
+- Tuple (estimate, variance, relative_eff)
 
-  # Evaluate the probability density function of `gx` at the samples
-  pdf_gx = pdf.(gx, samp)
+# Examples
+```julia
+using Distributions
+f = Normal(0, 1)
+g = Normal(0, 2)
+h(x) = x^2
+estimate, var, re = importance_sampling(h, f, g, 10_000)
+```
 
-  # Return the average of the values of the function `hs` evaluated at the samples
-  return mean(hs_val .* pdf_fx ./ pdf_gx)
-
+Implementation uses vectorized operations with SIMD optimizations.
+"""
+function importance_sampling(
+    hs::Function,
+    fx::D1,
+    gx::D2,
+    B::Int;
+    threaded::Bool=false
+) where {D1<:ContinuousUnivariateDistribution,
+         D2<:ContinuousUnivariateDistribution}
+    
+    B > 0 || throw(ArgumentError("Number of samples B must be ≥ 1, got $B"))
+    
+    # Preallocate arrays
+    samp = rand(gx, B)
+    weights = Vector{Float64}(undef, B)
+    hs_vals = Vector{Float64}(undef, B)
+    
+    # Compute in parallel if requested
+    if threaded
+        Threads.@threads for i in 1:B
+            x = @inbounds samp[i]
+            fx_pdf = @inbounds pdf(fx, x)
+            gx_pdf = @inbounds pdf(gx, x)
+            @inbounds hs_vals[i] = hs(x)
+            @inbounds weights[i] = fx_pdf / gx_pdf
+        end
+    else
+        @inbounds @simd for i in 1:B
+            x = samp[i]
+            fx_pdf = pdf(fx, x)
+            gx_pdf = pdf(gx, x)
+            hs_vals[i] = hs(x)
+            weights[i] = fx_pdf / gx_pdf
+        end
+    end
+    
+    # Calculate importance weights
+    w_sum = sum(weights)
+    w_sq_sum = sum(abs2, weights)
+    
+    # Normalize weights
+    inv_B = 1 / B
+    est = dot(hs_vals, weights) * inv_B
+    
+    # Calculate variance
+    var = (sum(hs_vals.^2 .* weights.^2) * inv_B - est^2) / B
+    
+    # Calculate relative efficiency
+    rel_eff = (w_sum^2) / (B * w_sq_sum)
+    
+    # Check numerical stability
+    isnan(est) && @warn "Importance sampling estimate is NaN - check proposal distribution support"
+    rel_eff < 1e-3 && @warn "Low relative efficiency ($(round(rel_eff, sigdigits=2))) - consider different proposal distribution"
+    
+    return est, var, rel_eff
 end
 
+@deprecate importance_sampling3 importance_sampling
