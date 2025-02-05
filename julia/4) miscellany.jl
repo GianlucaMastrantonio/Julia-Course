@@ -5,7 +5,7 @@ dir = "/Users/gianlucamastrantonio/Dropbox (Politecnico di Torino Staff)/lavori/
 using Pkg
 
 # Activate the package environment located in the specified directory
-Pkg.activate(dir)
+Pkg.activate(dir) 
 
 # Flag indicating whether to start a new project setup
 start_proj::Bool = false
