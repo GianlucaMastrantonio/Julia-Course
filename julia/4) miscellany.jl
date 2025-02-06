@@ -41,6 +41,8 @@ R"""
 plot(density(sample_norm))
 new_sample_norm = sample_norm + 2
 """
+# you can access the R consolo by using $ in the julia console
+
 
 # Retrieve the modified object from R back to Julia
 @rget new_sample_norm;
@@ -60,7 +62,7 @@ using Revise
 # Load the mc_package which contains custom functions
 using mc_package
 
-# Test the assertions in mc_package
+# Test the assertions in mc_package with the functions in assert.jl
 mc_package.test_assert(1, 1)
 mc_package.test_assert(1, 2)
 mc_package.test_toggled_assert(1, 1)
@@ -92,13 +94,13 @@ iter = 10
 test1 = zeros(Int64, iter)
 test2 = zeros(Int64, iter)
 
-# Test multi-threading with even distribution of tasks
+# Test multi-threading with even distribution of tasks (this may change depending on the workload of the computer)
 test_multi_threading(iter, Uniform(0.5, 2.0), test1)
 # Output the thread assignments
 test1
 
 # Test multi-threading with random distribution of tasks
-test_multi_threading(iter, Uniform(0.5, 2.0), test2)
+test_multi_spawn(iter, Uniform(0.5, 2.0), test2)
 # Output the thread assignments
 test2
 

@@ -61,10 +61,8 @@ typeof(dist1)
 
 # all julia packages are on github, and you can see there the code and the functions: https://github.com/JuliaStats/Distributions.jl
 
-
 # since it is a type, the function that has dist1 has a type give output based on the object
 # some examples
-
 rand(dist1)
 rand(dist1,2,3)
 mean(dist1) # true expected value
@@ -77,10 +75,16 @@ quantile(dist1,0.5)
 params(dist1)
 # or
 dump(dist1)
-# note that parameters are actually greek letters. IN Julia you can use unicode characters, for example
+# note that parameters are actually greek letters. In Julia you can use unicode characters, for example
 Σ = 2
 ζ = Σ*3
 ζ
+
+# as for the traspose of a matrix (even though ' and traspose create two different objects)
+zmat = rand(Gamma(1,1),3,2);
+zmat
+zmat'
+transpose(zmat)
 
 # we can access the parameters as (depends on the distribution)
 typeof(params(dist1))
@@ -114,19 +118,33 @@ importance_sampling(func_h, Gamma(1.0, 1.0), TDist(3.0), 1000)
 
 # we can check if the support of the g contains the one of  f, with the function issubset
 support(Gamma(1.0, 1.0))
+# maybe it is better to put this control inside the function
 
+# as a test, let's check the differente function and which one is faster. Even though there is not much difference
+@time for isim in 1:10000
+  importance_sampling(func_h, Gamma(1.0, 1.0), TDist(3.0), 1000)
+end
+
+@time for isim in 1:10000
+  mc_package.importance_sampling2(func_h, Gamma(1.0, 1.0), TDist(3.0), 1000)
+end
+
+@time for isim in 1:10000
+  mc_package.importance_sampling3(func_h, Gamma(1.0, 1.0), TDist(3.0), 1000)
+end
 
 # * #SECTION: Structures and Types
 # * #SUBSECTION: Monte Carlo
 #=
-Suppose that we want to define a function that approximate and integral with MC, but we want that, based on the type of the parameters, the function will use the standard MC or the one with importance sampling. WE can do it with the structure. See the file gen_struct.jl
+Suppose that we want to define a function that approximate and integral with MC, but we want that, based on the type of the parameters, the function will use the standard MC or the one with importance sampling. We can do it with the structure. See the file gen_struct.jl
 =#
 
 
 # we can create the first object
 mc_standard = StandardMC_V1(func_h, 100, zeros(Float64, 100));
+typeof(mc_standard)
 
-# i can change the value of the object
+# I can change the value of the object
 mc_standard.B = 20
 mc_standard.B
 
@@ -148,6 +166,8 @@ mc_standard_imm.samples
 
 
 # you should be careful when the object is created, because since arguments are passed by reference, the vector inside the object and the one used to create the object are the same
+# it is dangerous but also helpful when object must have things in common
+# for example each object may represent a level of a hierarchical model with shared random variables
 
 test_vec = rand(Normal(0.0,1.0),5)
 mc_standard_imm = StandardMC_immutable_V2(func_h,5, test_vec);

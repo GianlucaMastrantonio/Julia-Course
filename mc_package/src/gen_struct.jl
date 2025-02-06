@@ -17,7 +17,7 @@ The structures are
 
 if not specifies, the structure is immutable
 
-# ! Be careful that once a structure is loaded, it cannot be changed, not even by revise. Mys trategy is to give it a name and use find/replace to give a new name to it and all the place where I use it  
+# ! Be careful that once a structure is loaded, it cannot be changed, not even by revise. My strategy is to give it a name and use find/replace to give a new name to it and all the place where I use it  
 =#
 
 #=
@@ -29,7 +29,7 @@ We also define an external constructor to create a StandardMC_V1 without having 
 mutable struct StandardMC_V1 <: McMethod
 
   hx::Function
-  B::Int64 # hoe many samples do i want
+  B::Int64 # how many samples do I want
   samples::Vector{Float64} # a vector that will contain the samples
   
   # the constructor: this is not strickly necessary, but it is better to have it.
@@ -41,7 +41,7 @@ mutable struct StandardMC_V1 <: McMethod
   # but it is better to pass all the arguments
   function StandardMC_V1(hx::Function, B::Int64, samples::Vector{Float64})
     
-    @assert size(samples,1) == B "size of samples is not equal to B"# assert give an error if the condition is not true. For debugging is better to use  @toggled_assert of the package ToggleableAsserts, that can be turned on and off
+    @assert size(samples,1) == B "size of samples is not equal to B"# assert give an error if the condition is not true. For debugging is better to use  @toggled_assert of the package ToggleableAsserts, that can be turned on and off (see miscellany.jl)
 
     new(hx, B, samples)
   end
@@ -82,7 +82,7 @@ struct StandardMCPar_V1{TypeV<:Real} <: McMethod
 
   function StandardMCPar_V1(hx::Function,B::Int64, samples::Vector{TypeV}) where {TypeV<:Real}
 
-    @assert size(samples,1) == B "Size of samples is not equal to B"# assert give an error if the condition is not true. For debugging is better to use  @toggled_assert of the package ToggleableAsserts, that can be turned on and off
+    @assert size(samples,1) == B "Size of samples is not equal to B"
 
     new{TypeV}(hx, B, samples) 
   end

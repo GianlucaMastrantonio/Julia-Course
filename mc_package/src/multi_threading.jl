@@ -32,6 +32,7 @@ function test_multi_threading_uni(j::Int64, wait::Uniform{Float64}, vec::Vector{
   sleep(rand(wait))
   # Store the thread id in the vector
   vec[j] = Threads.threadid()
+  println(Threads.threadid())
 
 end
 
@@ -64,12 +65,12 @@ function test_multi_spawn(i::Int64, wait::Uniform{Float64}, vec::Vector{Int64})
 
 end
 
-function test_multi_spawn_uni(j::Float64, wait::Uniform{Float64}, vec::Vector{Int64})
+function test_multi_spawn_uni(j::Int64, wait::Uniform{Float64}, vec::Vector{Int64})
 
   # Sleep for a random amount of time
   sleep(rand(wait))
   # Store the thread id in the vector
   vec[j] = Threads.threadid()
-
+  println(Threads.threadid())
 end
 

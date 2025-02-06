@@ -120,9 +120,10 @@ P.S. In the global scope (the script), it is not possible to assign a new type t
 # option 1 - Note that we can change the type of x 
 typeof(x)
 x = z::Float64
-x = z::Float32
 x = z::Int64
+x = 1
 x = 1.4
+
 typeof(x)
 
 # option 2 - Note that we cannot change the type of the object anymore
@@ -160,8 +161,8 @@ There are different ways to define a vector
 =#
 x_vec = [1; 2; 3];
 x_vec = zeros(Int64, 3)
-x_vec = ones(Int64, 3) * 1
-x_vec = Vector{Int64}(undef, 3)
+x_vec = ones(Int64, 3) * 2
+x_vec = Vector{Int64}(undef, 3);
 
 #=
 Vectors, Matrices and Array are parametric type. Meaning that their type has an argument. Which is indicated as the type of the object that it contains, shown in the brackets.
@@ -189,7 +190,8 @@ x_array = ones(Int64, 2, 3, 5) * 1
 x_array = Array{Int64,3}(undef, 2, 3, 5)
 
 #=
-Note that, for example,  Vector{Int64} is equal to Array{Int64,1} and Matrix{Int64} is equal to Array{Int64,2}
+Note that, for example,  Vector{Int64} is equal to Array{Int64,1} and Matrix{Int64} is equal to Array{Int64,2}, but having different name
+are considered different when used as argument for a function (see next files)
 =#
 
 #=
@@ -222,6 +224,10 @@ test_array[6]
 test_array[7]
 test_array[8]
 
+
+#=
+Operations with matrices/vectors
+=#
 mat1 = [1 2 3; 4 5 6]
 mat2 = [1 2 3; 4 5 6] * 10
 
@@ -265,7 +271,7 @@ z_test
 # By changing x, we also change z
 # this is also true for the transpose of a matrix
 mat1
-mat1t = transpose(mat2)
+mat1t = transpose(mat1)
 
 mat1 === mat1t # they are not the same because they are of different types, but they share the matrix
 
