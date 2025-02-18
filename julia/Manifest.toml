@@ -2,7 +2,7 @@
 
 julia_version = "1.11.3"
 manifest_format = "2.0"
-project_hash = "6461539a3b14dbd81b5fbe631d6789ae65334e52"
+project_hash = "840a45f5bdb9dbb506d2d86d758ab761931017a7"
 
 [[deps.AbstractTrees]]
 git-tree-sha1 = "2d9c9a55f9c93e8887ad391fbae72f8ef55e1177"
@@ -872,6 +872,12 @@ version = "1.0.20+3"
 deps = ["Distributions", "LinearAlgebra", "PDMats", "Random", "StatsBase", "ToggleableAsserts"]
 path = "/Users/gianlucamastrantonio/Dropbox (Politecnico di Torino Staff)/lavori/Julia Course/mc_package"
 uuid = "a9632458-afde-45bc-8843-03e426c4d4bc"
+version = "0.1.0"
+
+[[deps.mcmc_mixture_model]]
+deps = ["Distributions", "LinearAlgebra", "PDMats", "Random", "StatsBase", "ToggleableAsserts"]
+path = "/Users/gianlucamastrantonio/Dropbox (Politecnico di Torino Staff)/lavori/Julia Course/mcmc_mixture_model"
+uuid = "3d89faa9-7e0c-4af2-b8f5-2489238fb188"
 version = "0.1.0"
 
 [[deps.nghttp2_jll]]

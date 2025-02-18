@@ -231,7 +231,7 @@ Operations with matrices/vectors
 mat1 = [1 2 3; 4 5 6]
 mat2 = [1 2 3; 4 5 6] * 10
 
-mat1 * mat2 # Le dimensioni non cambaciano
+mat1 * mat2 # Le dimensioni non combaciano
 mat1 * transpose(mat2)
 #=
 Note that the transpose of a matrix has a different type. This is because it is a lazy transpose, meaning it doesn't create a new matrix but retains the original with an additional argument specifying it is transposed.
